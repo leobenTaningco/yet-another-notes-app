@@ -15,7 +15,7 @@
 ### 1. Clone the repository
 
 ```bash
-git clone git@github.com:leobenTaningco/yet-another-notes-app.git
+git clone https://github.com/leobenTaningco/yet-another-notes-app.git
 cd yet-another-notes-app
 ```
 
