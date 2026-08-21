@@ -1,19 +1,19 @@
 import * as todoRepository from '../repositories/todo.repository'
 
-export function createTodo(userId: number,
+export function createTodoService(userId: number,
     title: string, 
     bodyNote: string){
-    return todoRepository.createTodo(userId, title, bodyNote);
+    return todoRepository.createTodoRepository(userId, title, bodyNote);
 }
 
-export function getAllTodos(){
-    return todoRepository.getAllTodos();
+export function getAllTodoService(){
+    return todoRepository.getAllTodosRepository();
 }
 
-export function getTodoById(id: number){
-    return todoRepository.getAllTodos();
+export function getTodoByIdService(id: number){
+    return todoRepository.getTodoByIdRepository(id);
 }
 
-export function deleteTodoById(id: number){
-    return todoRepository.getTodoById(id);
+export function deleteTodoByIdService(id: number){
+    return todoRepository.getTodoByIdRepository(id);
 }
