@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../generated/prisma/client'
+import { PrismaClient } from '../generated/prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg';
 
 const adapter = new PrismaPg({
@@ -9,14 +9,14 @@ const prisma = new PrismaClient({
     adapter,
 });
 
-export async function createTodoRepository( userId: number, 
-    title: string, 
-    bodyNote: string) {
+export async function createTodoRepository(title: string, 
+    bodyNote: string,
+    userId: string) {
     return prisma.todo.create({
         data: {
-            userId,
             title,
             bodyNote,
+            userId
         }
     })
 }
@@ -25,14 +25,14 @@ export function getAllTodosRepository(){
     return prisma.todo.findMany()
 }
 
-export async function getTodoByIdRepository(id: number){
+export async function getTodoByIdRepository(todoId: number){
     return prisma.todo.findUnique({
-        where: { id },
+        where: { todoId },
     });
 }
 
-export async function deleteTodoByIdRepository(id: number){
+export async function deleteTodoByIdRepository(todoId: number){
     return prisma.todo.delete({
-        where: { id },
+        where: { todoId },
     })
 }
