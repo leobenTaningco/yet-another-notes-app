@@ -229,7 +229,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  userId: string
+  userId?: string
   username: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -238,7 +238,7 @@ export type UserCreateInput = {
 }
 
 export type UserUncheckedCreateInput = {
-  userId: string
+  userId?: string
   username: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -265,7 +265,7 @@ export type UserUncheckedUpdateInput = {
 }
 
 export type UserCreateManyInput = {
-  userId: string
+  userId?: string
   username: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -340,7 +340,7 @@ export type UserUpdateOneRequiredWithoutTodosNestedInput = {
 }
 
 export type UserCreateWithoutTodosInput = {
-  userId: string
+  userId?: string
   username: string
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -348,7 +348,7 @@ export type UserCreateWithoutTodosInput = {
 }
 
 export type UserUncheckedCreateWithoutTodosInput = {
-  userId: string
+  userId?: string
   username: string
   createdAt?: Date | string
   updatedAt?: Date | string
