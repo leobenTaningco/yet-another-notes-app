@@ -25,3 +25,11 @@ export async function createUserRepository(userId: string,
 export async function deleteAllUsersRepository(){
     return prisma.user.deleteMany()
 }
+
+export async function findUserByUsername(username: string){
+    return prisma.user.findUnique({
+        where: {
+            username
+        }
+    })
+}

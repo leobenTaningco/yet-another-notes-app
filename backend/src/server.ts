@@ -1,6 +1,7 @@
 import express, {Request, Response} from "express";
 import todoRoutes from "./routes/todo.routes"
 import userRoutes from "./routes/user.routes"
+import authRoutes from "./routes/auth.routes"
 import cors from "cors"
 
 const app = express();
@@ -8,7 +9,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/todos/", todoRoutes);
-app.use("/api/user/", userRoutes)
+app.use("/api/user/", userRoutes);
+app.use("/api/auth/", authRoutes);
 
 app.get("/api/test", (_req: Request, res: Response) => {
     res.json({ message: "Backend works!" });
