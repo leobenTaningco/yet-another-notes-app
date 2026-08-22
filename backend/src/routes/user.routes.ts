@@ -4,6 +4,6 @@ import * as userController from "../controllers/user.controller"
 const router = Router();
 
 router.post("/", userController.createUserController);
-router.delete("/", userController.createUserController);
+router.delete("/", userController.deleteAllUsersController);
 
 export default router;

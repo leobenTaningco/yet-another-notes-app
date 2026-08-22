@@ -3,12 +3,12 @@ import * as todoService from "../services/todo.service";
 
 export async function createTodoController(req: Request, res: Response) {
     try {
-        const { userId, title, bodyNote } = req.body;
+        const { title, bodyNote, userId } = req.body;
 
         const todo = await todoService.createTodoService(
-            userId,
             title,
-            bodyNote
+            bodyNote,
+            userId,
         );
 
         res.status(201).json(todo);
@@ -32,8 +32,8 @@ export async function getAllTodoController(req: Request, res: Response) {
 
 export async function getTodoByIdController(req: Request, res: Response){
     try {
-        const { id } = req.body;
-        const todos = await todoService.getTodoByIdService(id);
+        const todoId = Number(req.params.id);
+        const todos = await todoService.getTodoByIdService(todoId);
         
         if(!todos){
             return res.status(404).json({
@@ -51,8 +51,8 @@ export async function getTodoByIdController(req: Request, res: Response){
 
 export async function deleteTodoByIdController(req: Request, res: Response) {
     try {
-        const { id } = req.body;
-        const todos = await todoService.deleteTodoByIdService(id);
+        const todoId = Number(req.params.id);
+        const todos = await todoService.deleteTodoByIdService(todoId);
 
         if(!todos){
             return res.status(404).json({
