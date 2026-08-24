@@ -9,7 +9,7 @@
 import { useState } from "react";
 import Login from "./components/Login";
 import Todo from "./components/Todo";
-import type { User } from "./types/user.types"
+import type { User } from "@supabase/supabase-js"
 
 export default function Home() {
     const [user, setUser] = useState<User | null>(null);

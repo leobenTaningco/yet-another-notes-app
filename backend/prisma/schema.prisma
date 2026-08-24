@@ -8,12 +8,7 @@ datasource db {
 }
 
 model User {
-  userId    String   @id @default(uuid()) @db.Uuid
-  username  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status    String
-
+  userId    String   @id
   todos Todo[]
 }
 
@@ -25,6 +20,6 @@ model Todo {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  userId String @db.Uuid
+  userId String
   user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }

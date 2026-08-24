@@ -1,7 +1,5 @@
-import { findUserByUsername } from '../repositories/user.repository'
+import { ensureUserRepository } from "../repositories/auth.repository"
 
-export async function loginService(username: string){
-    const user = await findUserByUsername(username);
-
-    return user;
+export async function ensureUserService(userId: string){
+    return ensureUserRepository(userId);
 }
