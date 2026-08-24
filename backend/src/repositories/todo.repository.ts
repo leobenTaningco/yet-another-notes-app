@@ -29,10 +29,23 @@ export async function getTodoByIdRepository(userId: string, todoId: number){
     });
 }
 
-export async function deleteTodoByIdRepository(userId: string, todoId: number){
-    return prisma.todo.delete({
-        where: { 
+export async function deleteTodoByIdRepository(
+    userId: string, 
+    todoId: number){
+        
+    const todo = await prisma.todo.findFirst({
+        where: {
             userId,
+            todoId
+        }
+    })
+
+    if(!todo){
+        throw new Error("Todo not found")
+    }
+
+    return await prisma.todo.delete({
+        where: { 
             todoId
         },
     })

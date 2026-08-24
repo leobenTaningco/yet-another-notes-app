@@ -21,7 +21,7 @@ export function getTodoByIdService(
 export function deleteTodoByIdService(
     userId: string,
     todoId: number){
-    return todoRepository.getTodoByIdRepository(userId,todoId);
+    return todoRepository.deleteTodoByIdRepository(userId,todoId);
 }
 
 export function updateTodoService(

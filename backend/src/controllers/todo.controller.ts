@@ -73,6 +73,10 @@ export async function deleteTodoByIdController(req: AuthenticatedRequest, res: R
             });
         }
 
+        res.status(200).json({
+            message: "Successfully deleted todo"
+        })
+
     } catch (error) {
         res.status(500).json({
             message: "Failed to delete todo"
