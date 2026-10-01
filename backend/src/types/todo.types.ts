@@ -4,3 +4,9 @@ export interface Todo {
     bodyNote: string | null;
     completed: boolean;
 }
+
+export interface UpdateTodoData{
+    title?: string;
+    bodyNote?: string | null;
+    completed?: boolean;
+}

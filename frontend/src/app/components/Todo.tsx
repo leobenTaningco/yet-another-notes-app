@@ -1,8 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { User } from "../types/user.types";
+import type { User } from "@supabase/supabase-js";
+
 import type { Todo as TodoType } from "../types/todo.types";
+
+import {
+    getTodos,
+    createTodo,
+    updateTodo,
+    deleteTodo,
+} from "../api/todo.api";
 
 interface TodoProps {
     user: User;
@@ -16,99 +24,82 @@ export default function Todo({ user }: TodoProps) {
     const [showCreate, setShowCreate] = useState(false);
 
     useEffect(() => {
-        getTodos();
-    }, [user.userId]);
+        loadTodos();
+    }, [user.id]);
 
-    async function getTodos() {
-        const response = await fetch(
-            `http://localhost:3001/api/todos?userId=${user.userId}`
-        );
+    async function loadTodos() {
+        try {
+            const data = await getTodos();
 
-        const data = await response.json();
-
-        setTodos(data);
+            setTodos(data);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    async function createTodo() {
+    async function handleCreateTodo() {
         if (!title.trim()) {
             return;
         }
 
-        const response = await fetch(
-            "http://localhost:3001/api/todos",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title,
-                    bodyNote,
-                    userId: user.userId,
-                }),
-            }
-        );
+        try {
+            const newTodo = await createTodo({
+                title,
+                bodyNote,
+            });
 
-        if (!response.ok) {
+            setTodos((current) => [
+                ...current,
+                newTodo,
+            ]);
+
+            setTitle("");
+            setBodyNote("");
+            setShowCreate(false);
+
+        } catch (error) {
+            console.error(error);
             alert("Failed to create todo");
-            return;
         }
-
-        const newTodo = await response.json();
-
-        setTodos((current) => [...current, newTodo]);
-
-        setTitle("");
-        setBodyNote("");
-        setShowCreate(false);
     }
 
-    async function toggleTodo(todo: TodoType) {
-        const response = await fetch(
-            `http://localhost:3001/api/todos/${todo.todoId}`,
-            {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
+    async function handleToggleTodo(todo: TodoType) {
+        try {
+            const updatedTodo = await updateTodo(
+                todo.todoId,
+                {
                     completed: !todo.completed,
-                }),
-            }
-        );
+                }
+            );
 
-        if (!response.ok) {
+            setTodos((current) =>
+                current.map((item) =>
+                    item.todoId === updatedTodo.todoId
+                        ? updatedTodo
+                        : item
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
             alert("Failed to update todo");
-            return;
         }
-
-        const updatedTodo = await response.json();
-
-        setTodos((current) =>
-            current.map((item) =>
-                item.todoId === updatedTodo.todoId
-                    ? updatedTodo
-                    : item
-            )
-        );
     }
 
-    async function deleteTodo(todoId: number) {
-        const response = await fetch(
-            `http://localhost:3001/api/todos/${todoId}`,
-            {
-                method: "DELETE",
-            }
-        );
+    async function handleDeleteTodo(todoId: number) {
+        try {
+            await deleteTodo(todoId);
 
-        if (!response.ok) {
+            setTodos((current) =>
+                current.filter(
+                    (todo) => todo.todoId !== todoId
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
             alert("Failed to delete todo");
-            return;
         }
-
-        setTodos((current) =>
-            current.filter((todo) => todo.todoId !== todoId)
-        );
     }
 
     return (
@@ -122,14 +113,16 @@ export default function Todo({ user }: TodoProps) {
                     </p>
 
                     <h1 className="text-3xl font-bold text-gray-900">
-                        {user.username}'s Notes
+                        {user.email}'s Notes
                     </h1>
                 </div>
 
                 {/* Create button */}
                 <div className="mb-6">
                     <button
-                        onClick={() => setShowCreate(!showCreate)}
+                        onClick={() =>
+                            setShowCreate(!showCreate)
+                        }
                         className="rounded-lg bg-blue-600 px-5 py-2.5 font-medium text-white hover:bg-blue-700"
                     >
                         + Create Todo
@@ -147,27 +140,33 @@ export default function Todo({ user }: TodoProps) {
                             type="text"
                             placeholder="Title"
                             value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            onChange={(e) =>
+                                setTitle(e.target.value)
+                            }
                             className="mb-3 w-full rounded-lg border border-gray-300 px-4 py-2"
                         />
 
                         <textarea
                             placeholder="Notes"
                             value={bodyNote}
-                            onChange={(e) => setBodyNote(e.target.value)}
+                            onChange={(e) =>
+                                setBodyNote(e.target.value)
+                            }
                             className="mb-4 min-h-24 w-full rounded-lg border border-gray-300 px-4 py-2"
                         />
 
                         <div className="flex gap-3">
                             <button
-                                onClick={createTodo}
+                                onClick={handleCreateTodo}
                                 className="rounded-lg bg-green-600 px-4 py-2 font-medium text-white hover:bg-green-700"
                             >
                                 Create
                             </button>
 
                             <button
-                                onClick={() => setShowCreate(false)}
+                                onClick={() =>
+                                    setShowCreate(false)
+                                }
                                 className="rounded-lg border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50"
                             >
                                 Cancel
@@ -221,7 +220,9 @@ export default function Todo({ user }: TodoProps) {
 
                                     <div className="flex gap-2">
                                         <button
-                                            onClick={() => toggleTodo(todo)}
+                                            onClick={() =>
+                                                handleToggleTodo(todo)
+                                            }
                                             className="rounded-lg border border-gray-300 px-3 py-2 text-sm hover:bg-gray-100"
                                         >
                                             {todo.completed
@@ -231,7 +232,9 @@ export default function Todo({ user }: TodoProps) {
 
                                         <button
                                             onClick={() =>
-                                                deleteTodo(todo.todoId)
+                                                handleDeleteTodo(
+                                                    todo.todoId
+                                                )
                                             }
                                             className="rounded-lg border border-red-200 px-3 py-2 text-sm text-red-600 hover:bg-red-50"
                                         >
