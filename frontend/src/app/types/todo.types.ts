@@ -5,6 +5,11 @@ export interface Todo {
     completed: boolean;
 }
 
+export interface CreateTodoData{
+    title: string;
+    bodyNote: string | null;
+}
+
 export interface UpdateTodoData{
     title?: string;
     bodyNote?: string | null;

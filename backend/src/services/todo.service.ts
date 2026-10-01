@@ -1,16 +1,33 @@
-import { Todo } from "../types/todo.types.ts";
+import * as todoRepository from '../repositories/todo.repository'
+import { UpdateTodoData } from '../types/todo.types'
 
-const todos : Todo[] = []; // substitute for db since no db yet
+export function createTodoService(
+    userId: string,
+    title: string, 
+    bodyNote: string){
+    return todoRepository.createTodoRepository(userId, title, bodyNote);
+}
 
-export function createTodo(title: string, bodyNote: string): Todo {
-    const todo: Todo = {
-        id: todos.length + 1,
-        title,
-        bodyNote,
-        completed: false,
-    }
+export function getAllTodoService(userId: string){
+    return todoRepository.getAllTodosRepository(userId);
+}
 
-    todos.push(todo); // substitute for db since no db yet
+export function getTodoByIdService(
+    userId: string,
+    todoId: number){
+    return todoRepository.getTodoByIdRepository(userId, todoId);
+}
 
-    return todo;
+export function deleteTodoByIdService(
+    userId: string,
+    todoId: number){
+    return todoRepository.deleteTodoByIdRepository(userId,todoId);
+}
+
+export function updateTodoService(
+    userId: string,
+    todoId: number, 
+    data: UpdateTodoData
+){
+    return todoRepository.updateTodoRepository(userId, todoId, data);
 }
